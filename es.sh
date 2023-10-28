@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DATA_FILE=$1
-LAST_OUTPUT_LINE=10
+LAST_OUTPUT_LINE=45
 
 LAST_OUTPUT_LINE=$((LAST_OUTPUT_LINE - 1))
 
@@ -138,16 +138,17 @@ do
     if [[ $shortcut_input = "#" ]]; then
         # Clear current input
         shortcut="" 
+        COMMAND_OUTPUT=""
     else
         shortcut="$shortcut$shortcut_input"
 
         cmd=$(read_file $shortcut)
         if [ -n "$cmd" ]; then
-
+            COMMAND_OUTPUT=$($cmd)                
             if [ -z $HISTORY ]; then
                 HISTORY=$cmd
             else
-                HISTORY="$HISTORY;$cmd"
+                HISTORY="$cmd;$HISTORY"
             fi
             shortcut=""
         fi
