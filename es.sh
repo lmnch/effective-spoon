@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DATA_FILE=$1
-LAST_OUTPUT_LINE=50
+LAST_OUTPUT_LINE=10
 
 LAST_OUTPUT_LINE=$((LAST_OUTPUT_LINE - 1))
 
@@ -79,14 +79,6 @@ p() {
 
 
 # Initializes the Screen variable
-init_screen() {
-    declare -A Screen
-    for i in $(seq 0 $LAST_OUTPUT_LINE); do 
-        Screen[$i,0]=""
-        Screen[$i,1]=""
-        Screen[$i,2]=""
-    done
-}
 
 # Writes sth in the format:
 # *y*
@@ -127,7 +119,13 @@ do
     echo ""
     figlet -w $(tput cols) "\$   $shortcut"
 
-    init_screen
+    # Init screen
+    declare -A Screen
+    for i in $(seq 0 $LAST_OUTPUT_LINE); do 
+        Screen[$i,0]=""
+        Screen[$i,1]=""
+        Screen[$i,2]=""
+    done
 
     print_box "$(echo -e "1\n2\n$(get_history)\n")"
     print_box "$(echo -e "1\n0\n$(get_matching_commands $shortcut)\n")"
@@ -145,7 +143,7 @@ do
 
         cmd=$(read_file $shortcut)
         if [ -n "$cmd" ]; then
-            COMMAND_OUTPUT=$($cmd)
+
             if [ -z $HISTORY ]; then
                 HISTORY=$cmd
             else
