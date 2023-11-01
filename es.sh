@@ -5,7 +5,8 @@ LAST_OUTPUT_LINE=45
 
 LAST_OUTPUT_LINE=$((LAST_OUTPUT_LINE - 1))
 
-read_file() {
+# checks if the input matches the entered value and returns the value for it
+get_cmd() {
     INPUT_KEY=$1
 
     while IFS= read -r line; 
@@ -13,7 +14,7 @@ read_file() {
         # Get key
         key=$(echo "$line" | sed -e 's/\=.*//')
         # Value
-        value=$(echo "$line" | sed -e 's/.*\=//')
+        value=$(echo "$line" | sed -e 's/^\w*\=//')
 
         if [ "$key" = "$INPUT_KEY" ]; then
             echo $value
@@ -62,6 +63,7 @@ get_command_output() {
 }
 
 
+# Three column printing
 p() {
     left=$1
     center=$2
@@ -142,7 +144,7 @@ do
     else
         shortcut="$shortcut$shortcut_input"
 
-        cmd=$(read_file $shortcut)
+        cmd=$(get_cmd $shortcut)
         if [ -n "$cmd" ]; then
             COMMAND_OUTPUT=$($cmd)                
             if [ -z $HISTORY ]; then
